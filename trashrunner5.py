@@ -50,13 +50,13 @@ def cortar_spritesheet(sheet, largura, altura):
         sprites.append(frame)
     return sprites
 
-sprites_personagem = cortar_spritesheet(spritesheet, 34, 43)
+sprites_personagem = cortar_spritesheet(spritesheet, 50, 50)
 
 # Personagem com animação
 class Jogador(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.sprites = [pygame.transform.scale(s, (250, 250)) for s in sprites_personagem]
+        self.sprites = [pygame.transform.scale(s, (200, 250)) for s in sprites_personagem]  # Reduziu a largura para 200
         self.frame = 0
         self.image = self.sprites[self.frame]
         self.rect = self.image.get_rect()
@@ -94,7 +94,6 @@ class Obstaculo(pygame.sprite.Sprite):
         self.image = pygame.Surface((100, 100))
         self.image.fill(VERMELHO)
         self.rect = self.image.get_rect()
-#        self.rect.x = LARGURA
         self.rect.x = LARGURA       
         self.rect.y = CHAO - 100
 
@@ -185,7 +184,8 @@ while True:
             multiplicador_velocidade += passo_multiplicador
             proxima_meta += passo_meta
 
-        if pygame.sprite.collide_rect(jogador, obstaculo):
+        # Verifica a colisão com o obstáculo (apenas se a parte do braço tocar)
+        if jogador.rect.colliderect(obstaculo.rect):
             vida -= 1
             estado_jogo = GAME_OVER
 
